@@ -1,0 +1,28 @@
+mqtt:
+  enabled: False
+
+cameras:
+  cam-1:
+    enabled: True
+    ffmpeg:
+#      global_args: -hide_banner
+#      haccel_args: preset-nvidia-h264
+#      protection_mode: off
+      inputs:
+        - path: rtsp://192.168.1.22:554/stream=0
+          roles:
+            - detect
+
+record:
+  enabled: True
+  retain:
+    days: 3
+    mode: motion
+  events:
+    retain:
+      default: 30
+      mode: motion
+
+snapshots:
+  enabled: True
+  timestamp: True

@@ -1,0 +1,30 @@
+services:
+  frigate:
+    container_name: frigate
+    runtime: nvidia
+    privileged: true
+    restart: unless-stopped
+    image: ghcr.io/blakeblackshear/frigate:stable
+    cap_add:
+      - CAP_PERFMON
+    shm_size: "128mb"
+    volumes:
+      - ./config:/config
+      - ./storage:/media/frigate
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    devices:
+      - /dev:/dev
+    deploy: # <------------- Add this section
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    ports:
+      - "5000:5000"
+      - "8554:8554" # RTSP feeds
+#      - "554:554" # RTSP feeds
