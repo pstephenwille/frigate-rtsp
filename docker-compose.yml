@@ -1,6 +1,16 @@
 services:
+  mosquitto:
+    image: eclipse-mosquitto
+    network_mode: host
+    volumes:
+      - ./conf:/mosquitto/conf
+      - ./data:/mosquitto/data
+      - ./log:/mosquitto/log
+
   frigate:
     container_name: frigate
+    depends_on:
+      - mosquitto
     runtime: nvidia
     privileged: true
     restart: unless-stopped
